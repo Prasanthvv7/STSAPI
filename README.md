@@ -34,3 +34,14 @@ Start the Flask server:
 
 ```bash
 python app.py
+```
+then
+
+```bash
+curl --location 'http://localhost:5000/translate' \
+--form 'file=@"/Users/prasanth/PycharmProjects/STSFinal/tamiiltest.wav"' \
+--form 'source_language="tamil"' \
+--form 'mymemory_source_language="tamil india"' \
+--form 'chatgpt_api_key="OPENAI_API_KEY"
+'
+```
