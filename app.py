@@ -4,7 +4,6 @@ import os
 
 app = Flask(__name__)
 
-
 @app.route('/translate', methods=['POST'])
 def translate():
     # Check if a file was uploaded
@@ -31,16 +30,17 @@ def translate():
         # Step 1: Transcribe the audio file
         subprocess.run(['python', 'transcribe.py', audio_path, source_language, 'transcribe.txt'], check=True)
 
-        # Step 2: Translate using mymemory.py
-        if not attempt_translation('mymemory.py', mymemory_source_language):
-            # Step 3: Translate using google.py
-            if not attempt_translation('google.py', source_language):
-                # Step 4: Translate using chatgpt.py
-                if chatgpt_api_key:
-                    if not attempt_translation('chatgpt.py', source_language, chatgpt_api_key):
-                        return jsonify({'error': 'Translation failed'}), 500
-                else:
-                    return jsonify({'error': 'ChatGPT API key is required'}), 400
+        # Step 2: Translate using google.py
+        if attempt_translation('google.py', source_language):
+            pass
+        # Step 3: Translate using mymemory.py
+        elif attempt_translation('mymemory.py', mymemory_source_language):
+            pass
+        # Step 4: Translate using chatgpt.py
+        elif chatgpt_api_key and attempt_translation('chatgpt.py', source_language, chatgpt_api_key):
+            pass
+        else:
+            return jsonify({'error': 'Translation failed'}), 500
 
         # Read the output file and return the contents
         if os.path.exists('output.txt'):
@@ -57,7 +57,6 @@ def translate():
 
     return response
 
-
 def attempt_translation(script_name, source_language, chatgpt_api_key=None):
     try:
         if script_name == 'chatgpt.py':
@@ -70,7 +69,6 @@ def attempt_translation(script_name, source_language, chatgpt_api_key=None):
     except subprocess.CalledProcessError:
         pass
     return False
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080)
