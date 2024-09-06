@@ -7,7 +7,7 @@ def translate_file(input_file_path, output_file_path, api_key, source_language):
 
 
     # Initialize the translator
-    translator = ChatGptTranslator(api_key=api_key, source=source_language, target='english')
+    translator = ChatGptTranslator(api_key=api_key, source=source_language, target='english',model="gpt-4o")
 
     # Perform translation
     translated_text = translator.translate_file(input_file_path)
