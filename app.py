@@ -1,9 +1,10 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import subprocess
 import os
 
 app = Flask(__name__)
-
+CORS(app)
 @app.route('/translate', methods=['POST'])
 def translate():
     # Check if a file was uploaded
@@ -71,4 +72,4 @@ def attempt_translation(script_name, source_language, chatgpt_api_key=None):
     return False
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080)
+    app.run(host='0.0.0.0', port=4000)
